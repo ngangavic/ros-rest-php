@@ -29,7 +29,7 @@ Pass the POST data
 ```
 $ros7->requestData='{".proplist":["name","type"]}';//send post data
 ```
-Make requests
+Make requests(Responses are in JSON format)
 ```
 $res=$ros7->ros7POST();//post request
 
