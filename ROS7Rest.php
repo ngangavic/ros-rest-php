@@ -38,7 +38,7 @@ class ROS7Rest
         }
         curl_close($ch);
 
-        print_r($return);
+       return $return;
     }
 
     //post->universal methos to all console commands
@@ -65,7 +65,7 @@ class ROS7Rest
         }
         curl_close($ch);
 
-        print_r($return);
+        return $return;
     }
 
     //put->create a new record
@@ -92,7 +92,7 @@ class ROS7Rest
         }
         curl_close($ch);
 
-        print_r($return);
+        return $return;
     }
 
     //delete->delete a signle record
@@ -112,7 +112,7 @@ class ROS7Rest
         }
         curl_close($ch);
 
-        print_r($return);
+        return $return;
     }
 
     //patch->update single record
@@ -135,7 +135,7 @@ class ROS7Rest
         }
         curl_close($ch);
 
-        print_r($return);
+        return $return;
     }
 
     public function __destruct()
