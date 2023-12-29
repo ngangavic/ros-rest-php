@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Dashboard | Tandaa Networks</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Responsive bootstrap 4 admin template" name="description" />
+    <meta content="Coderthemes" name="author" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+
+    <script type="text/javascript" src="../smoothie.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"
+        integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <style>
+        div.smoothie-chart-tooltip {
+            background: #444;
+            padding: 1em;
+            margin-top: 20px;
+            font-family: consolas;
+            color: white;
+            font-size: 10px;
+            pointer-events: none;
+        }
+
+        .table td,
+        .table th {
+            padding: .2rem;
+            vertical-align: middle;
+            border-top: 1px solid #e9ecef;
+        }
+    </style>
+
+</head>
+
+<body>
+    <canvas id="mycanvas" style="width:100%; height:200px;"></canvas>
+    <script>
+
+        var chart = new SmoothieChart({
+            responsive: true,
+            millisPerPixel: 20,
+            tooltip: true,
+            grid: {
+                fillStyle: '#ffffff',
+                strokeStyle: 'transparent',
+                sharpLines: true,
+                millisPerLine: 5000,
+                verticalSections: 0,
+                borderVisible: false
+            },
+            labels: { fillStyle: '#000000' },
+            timestampFormatter: SmoothieChart.timeFormatter
+        }),
+            canvas = document.getElementById('mycanvas'),
+            series1 = new TimeSeries(),
+            series2 = new TimeSeries();
+
+        chart.addTimeSeries(series1, {
+            tooltipLabel: 'Download(Mbps)',
+            lineWidth: 4,
+            strokeStyle: '#88bcee',
+            fillStyle: 'rgba(136,188,238,0.30)'
+        });
+        chart.addTimeSeries(series2, {
+            tooltipLabel: 'Upload(Mbps)',
+            lineWidth: 4,
+            strokeStyle: '#ff0000',
+            fillStyle: 'rgba(255,0,0,0.30)'
+        });
+        chart.streamTo(canvas, 2000);
+
+        var chart;
+
+        function getDT() {
+            $.ajax({
+                url: 'test.php',
+                datatype: "json",
+                success: function (data) {
+                    console.log(data);
+                    var values = JSON.parse(data);
+                    for (let i = 0; i < values.length; i++) {
+                        let obj = values[i];
+                        console.log(obj.upload);
+                        series1.append(new Date().getTime(), obj.upload);
+                        series2.append(new Date().getTime(), obj.download);
+                        // mikindaniUpload.append(new Date().getTime(), obj.download);
+                        break;
+                    }
+                    // values.forEach(element => {
+                    //     console.log(element.upload);
+                    //     series1.append(new Date().getTime(), element.upload);
+                    //     series2.append(new Date().getTime(), element['download']);
+                    // });
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    console.error("Status: " + textStatus + " request: " + XMLHttpRequest);
+                    console.error("Error: " + errorThrown);
+                }
+            });
+        }
+
+        setInterval(function () {
+            getDT()
+        }, 1000);
+
+    </script>
+
+</body>
+
+</html>
